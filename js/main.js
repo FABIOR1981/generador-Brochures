@@ -226,7 +226,7 @@ function prepararRender(d) {
             ['Horarios', d.horarios],
             ['Primera consulta', d.consulta]
         ].filter(m => m[1]).map(([l, v]) => `<div><span class="lab">${l}</span>${esc(v)}</div>`).join(''),
-        quien: `<b>${esc(d.nombre)}</b>${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}`,
+        quien: `<b>${esc(d.nombre)}</b><br>${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}`,
         clientesSec: clientesHtml,
         tags: tags,
         hayCli: hayCli,

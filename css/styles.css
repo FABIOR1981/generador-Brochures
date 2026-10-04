@@ -74,7 +74,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { border-color
 .t1 .foto { width: 50mm; height: 64mm; border-radius: 25mm 25mm 3mm 3mm; background: var(--acc); color: #fff; font: 500 32pt Newsreader, serif; }
 .t1 .cont div { margin-bottom: 4mm; overflow-wrap: anywhere; }
 .t1 .main { padding: 17mm 16mm 14mm 14mm; display: flex; flex-direction: column; gap: 5mm; }
-.t1 h1 { font: 400 24pt/1.15 Newsreader, serif; } .t1 .quien b { display: block; font-size: 12.5pt; }
+.t1 h1 { font: 400 24pt/1.15 Newsreader, serif; } .t1 .quien b { font-size: 12.5pt; }
 .t1 h2 { font: 600 10.5pt Figtree, sans-serif; color: var(--acc); margin-bottom: 1.5mm; }
 .t1 .serv { border-top: .3mm solid #cfdad7; padding: 2.5mm 0; } .t1 .serv b { display: block; }
 .t1 .meta { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; font-size: 9pt; }
@@ -84,7 +84,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { border-color
 .t2 .top { background: var(--ink); color: #fff; padding: 16mm 16mm 12mm; display: flex; justify-content: space-between; gap: 10mm; align-items: flex-end; }
 .t2 .top h1 { font: 700 22pt/1.2 'Libre Franklin', sans-serif; margin-bottom: 4mm; } .t2 .top .lab { color: #b9c4d6; }
 .t2 .foto { width: 42mm; height: 42mm; border-radius: 3mm; background: var(--acc); color: #fff; font: 700 24pt 'Libre Franklin', sans-serif; }
-.t2 .quien b { display: block; font-size: 11.5pt; }
+.t2 .quien b { font-size: 11.5pt; }
 .t2 .cuerpo { flex: 1; display: grid; grid-template-columns: 1fr 1.3fr; gap: 12mm; padding: 12mm 16mm; }
 .t2 .cuerpo > div { display: flex; flex-direction: column; }
 .t2 .cuerpo section, .t2 .cuerpo > div > p { margin-bottom: 6mm; }
