@@ -3,6 +3,13 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const nl = s => esc(s).replace(/\n/g, '<br>');
 const F = ['nombre', 'titulo', 'registro', 'titular', 'bio', 'enfoque', 'publico', 'modalidad', 'horarios', 'consulta', 'tel', 'email', 'web', 'lugar', 'razon', 'rut', 'fotourl', 'clientes'];
 const CONTACTO = { nombre: 'Lic. Rita Morales', tel: '+598 99140274', email: 'licritamorales@gmail.com' };
+const FOTO_PERFIL = 'https://res.cloudinary.com/p0qlmlor/image/upload/v1791151072/brochures/logos/Perfil_Rita.webp';
+const FOTOS_EJEMPLO = new Set([
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80',
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'
+]);
 
 let fotoUrlCustom = '', accU = 0, logosCli = [];
 const MAX_LOGOS = 8;
@@ -68,7 +75,7 @@ const PRE = {
         email: CONTACTO.email,
         web: '',
         lugar: 'Montevideo, Uruguay',
-        fotourl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80'
+        fotourl: FOTO_PERFIL
     },
     org: {
         pl: 't4', // Por defecto ahora sugiere la plantilla ejecutiva t4 para perfiles organizacionales
@@ -93,7 +100,7 @@ const PRE = {
         email: CONTACTO.email,
         web: '',
         lugar: 'Montevideo, Uruguay',
-        fotourl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80'
+        fotourl: FOTO_PERFIL
     },
     oec: {
         pl: 't4',
@@ -117,7 +124,7 @@ const PRE = {
         email: CONTACTO.email,
         web: '',
         lugar: 'Montevideo, Uruguay',
-        fotourl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80'
+        fotourl: FOTO_PERFIL
     },
     dev: {
         pl: 't5',
@@ -141,7 +148,7 @@ const PRE = {
         email: CONTACTO.email,
         web: '',
         lugar: 'Montevideo, Uruguay',
-        fotourl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'
+        fotourl: FOTO_PERFIL
     }
 };
 
@@ -356,6 +363,7 @@ function restaurar() {
         const est = JSON.parse(localStorage.getItem(LS) || 'null');
         if (!est) return false;
         F.forEach(f => { if ($('f-' + f)) $('f-' + f).value = est[f] || ''; });
+        if (FOTOS_EJEMPLO.has($('f-fotourl').value)) $('f-fotourl').value = FOTO_PERFIL;
         for (let i = 0; i < 4; i++) {
             $('st'+i).value = est.sv?.[i]?.[0] || '';
             $('sd'+i).value = est.sv?.[i]?.[1] || '';
