@@ -3,7 +3,8 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt
 const nl = s => esc(s).replace(/\n/g, '<br>');
 const F = ['nombre', 'titulo', 'registro', 'titular', 'bio', 'enfoque', 'publico', 'modalidad', 'horarios', 'consulta', 'tel', 'email', 'web', 'lugar', 'razon', 'rut', 'fotourl', 'clientes'];
 
-let fotoUrlCustom = '', accU = 0;
+let fotoUrlCustom = '', accU = 0, logosCli = [];
+const MAX_LOGOS = 8;
 const LS = 'brochure_pro_v4';
 
 // Sistema de pestañas del panel lateral
@@ -155,6 +156,8 @@ function cargarPreset(k) {
     $('f-conf').checked = true;
     $('f-fiscal').checked = false;
     fotoUrlCustom = '';
+    logosCli = [];
+    panelLogos();
     render();
 }
 
@@ -184,9 +187,14 @@ function prepararRender(d) {
     ].filter(x => x[1]).map(([l, v]) => `<div><span class="lab">${l}</span>${esc(v)}</div>`).join('');
 
     const tags = d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('');
+    const logosHtml = logosCli.length
+        ? `<div class="logos-grid">${logosCli.map((s, i) => `<img src="${esc(s)}" alt="Logo de cliente ${i + 1}">`).join('')}</div>`
+        : '';
+    const hayCli = d.clientesArr.length > 0 || logosCli.length > 0;
+    const cliInner = logosHtml + (d.clientesArr.length ? `<div class="clientes-grid">${tags}</div>` : '');
     let clientesHtml = '';
-    if (d.clientesArr.length > 0) {
-        clientesHtml = `<div class="clientes-bloque"><span class="lab">Clientes / Aliados Destacados</span><div class="clientes-grid">${tags}</div></div>`;
+    if (hayCli) {
+        clientesHtml = `<div class="clientes-bloque"><span class="lab">Clientes / Aliados Destacados</span>${cliInner}</div>`;
     }
 
     let fiscalTxt = '';
@@ -209,6 +217,8 @@ function prepararRender(d) {
         quien: `<b>${esc(d.nombre)}</b>${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}`,
         clientesSec: clientesHtml,
         tags: tags,
+        hayCli: hayCli,
+        cliInner: cliInner,
         nota: d.conf ? '<p class="nota">Todo lo conversado en consulta es estrictamente confidencial y está amparado por el secreto profesional.</p>' : ''
     };
 }
@@ -220,7 +230,7 @@ const Plantillas = {
     
     t3: (d, p) => {
         const R = (l, h) => h ? `<div class="fila"><b>${l}</b><div>${h}</div></div>` : '';
-        return `<div class="cab"><div><h1>${esc(d.nombre)}</h1><div class="quien">${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}</div></div><div class="foto">${p.foto}</div></div>${d.titular ? `<p class="tit">${esc(d.titular)}</p>` : ''}${d.bio ? `<p>${nl(d.bio)}</p>` : ''}<div>${R('Enfoque', d.enfoque && nl(d.enfoque))}${R('Atiendo a', p.pub)}${d.sv.map(s => R(esc(s.t), esc(s.d))).join('')}${R('Modalidad', esc(d.modalidad))}${R('Horarios', esc(d.horarios))}${R('Primera consulta', esc(d.consulta))}${d.clientesArr.length ? R('Clientes', d.clientesArr.join(', ')) : ''}</div><div class="pie">${p.cont.replace(/<span class="lab">([^<]*)<\/span>/g,'<span class="lab" style="display:inline;margin-right:1.5mm">$1</span>')}${p.fiscalTxt}${p.nota}</div>`;
+        return `<div class="cab"><div><h1>${esc(d.nombre)}</h1><div class="quien">${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}</div></div><div class="foto">${p.foto}</div></div>${d.titular ? `<p class="tit">${esc(d.titular)}</p>` : ''}${d.bio ? `<p>${nl(d.bio)}</p>` : ''}<div>${R('Enfoque', d.enfoque && nl(d.enfoque))}${R('Atiendo a', p.pub)}${d.sv.map(s => R(esc(s.t), esc(s.d))).join('')}${R('Modalidad', esc(d.modalidad))}${R('Horarios', esc(d.horarios))}${R('Primera consulta', esc(d.consulta))}${p.hayCli ? R('Clientes', p.cliInner) : ''}</div><div class="pie">${p.cont.replace(/<span class="lab">([^<]*)<\/span>/g,'<span class="lab" style="display:inline;margin-right:1.5mm">$1</span>')}${p.fiscalTxt}${p.nota}</div>`;
     },
 
     // Nueva t4: Ejecutivo Corporativo (Azul Marino y Oro)
@@ -242,7 +252,7 @@ const Plantillas = {
                 </div>
                 <div class="foto">${p.foto}</div>
             </div>
-            ${d.clientesArr.length ? `<div><h2>Clientes y Alianzas</h2><div class="clientes-grid">${p.tags}</div></div>` : ''}
+            ${p.hayCli ? `<div><h2>Clientes y Alianzas</h2>${p.cliInner}</div>` : ''}
             ${d.sv.length ? `<div>
                 <h2>Nuestros Servicios</h2>
                 <div class="servicios-grid">${p.servCards}</div>
@@ -271,7 +281,7 @@ const Plantillas = {
                 ${S('Presentación', d.bio && `<p>${nl(d.bio)}</p>`)}
                 ${S('Metodología', d.enfoque && `<p>${nl(d.enfoque)}</p>`)}
                 ${S('Dirigido a', p.pub)}
-                ${d.clientesArr.length ? `<section><h2>Aliados</h2><div class="clientes-grid">${p.tags}</div></section>` : ''}
+                ${p.hayCli ? `<section><h2>Aliados</h2>${p.cliInner}</section>` : ''}
             </div>
             <div>
                 ${S('Servicios', p.serv)}
@@ -298,7 +308,7 @@ const Plantillas = {
             <div>
                 ${S('Enfoque y Perfil', (d.bio ? `<p>${nl(d.bio)}</p>` : '') + (d.enfoque ? `<p class="aparte"><b>Metodología:</b> ${esc(d.enfoque)}</p>` : ''))}
                 ${S('Dirigido a', p.pub)}
-                ${d.clientesArr.length ? `<section><h2>Organizaciones</h2><div class="clientes-grid">${p.tags}</div></section>` : ''}
+                ${p.hayCli ? `<section><h2>Organizaciones</h2>${p.cliInner}</section>` : ''}
             </div>
             <div>
                 ${S('Servicios Ofrecidos', p.serv)}
@@ -331,6 +341,7 @@ function guardar() {
         est.fiscal = $('f-fiscal').checked;
         est.acc = accU ? $('f-acc').value : '';
         est.foto = fotoUrlCustom;
+        est.logos = logosCli;
         localStorage.setItem(LS, JSON.stringify(est));
     } catch (e) { /* almacenamiento lleno o bloqueado: se ignora */ }
 }
@@ -349,6 +360,8 @@ function restaurar() {
         $('f-fiscal').checked = !!est.fiscal;
         fotoUrlCustom = est.foto || '';
         if (est.acc) { $('f-acc').value = est.acc; accU = 1; }
+        logosCli = Array.isArray(est.logos) ? est.logos.filter(s => typeof s === 'string').slice(0, MAX_LOGOS) : [];
+        panelLogos();
         render();
         return true;
     } catch (e) { return false; }
@@ -404,6 +417,72 @@ $('sinfoto').onclick = () => {
     $('f-fotourl').value = '';$('f-foto-file').value = '';
     render();
 };
+
+// ---- Logos de clientes ----
+function mensajeLogos(t) { $('logos-msg').textContent = t || ''; }
+
+function panelLogos() {
+    $('logos-lista').innerHTML = logosCli.map((s, i) => `
+        <div class="logo-item"><img src="${esc(s)}" alt="Logo ${i + 1}"><button type="button" data-i="${i}" aria-label="Quitar logo ${i + 1}">×</button></div>`).join('');
+}
+
+function agregarLogo(src) {
+    if (logosCli.length >= MAX_LOGOS) { mensajeLogos(`Máximo ${MAX_LOGOS} logos. Quitá alguno para agregar otro.`); return false; }
+    logosCli.push(src);
+    mensajeLogos('');
+    panelLogos();
+    render();
+    return true;
+}
+
+function logoDesdeArchivo(file) {
+    return new Promise((ok, no) => {
+        const r = new FileReader();
+        r.onerror = no;
+        r.onload = ev => {
+            const img = new Image();
+            img.onerror = no;
+            img.onload = () => {
+                const w0 = img.naturalWidth || 300, h0 = img.naturalHeight || 150;
+                const k = Math.min(1, 400 / Math.max(w0, h0));
+                const c = document.createElement('canvas');
+                c.width = Math.max(1, Math.round(w0 * k));
+                c.height = Math.max(1, Math.round(h0 * k));
+                c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+                ok(c.toDataURL(file.type === 'image/jpeg' ? 'image/jpeg' : 'image/png', 0.9));
+            };
+            img.src = ev.target.result;
+        };
+        r.readAsDataURL(file);
+    });
+}
+
+$('f-logos-file').onchange = async e => {
+    const archivos = [...e.target.files];
+    e.target.value = '';
+    let fallos = 0;
+    for (const f of archivos) {
+        if (logosCli.length >= MAX_LOGOS) { mensajeLogos(`Máximo ${MAX_LOGOS} logos. Se omitieron los restantes.`); return; }
+        try { agregarLogo(await logoDesdeArchivo(f)); } catch (err) { fallos++; }
+    }
+    if (fallos) mensajeLogos(`No se pudo leer ${fallos} archivo(s). Probá con PNG, JPG o SVG.`);
+};
+
+$('btn-logo-url').onclick = () => {
+    const u = $('f-logo-url').value.trim();
+    if (!/^https?:\/\/\S+$/i.test(u)) { mensajeLogos('Ingresá una URL que empiece con http:// o https://'); return; }
+    if (agregarLogo(u)) $('f-logo-url').value = '';
+};
+$('f-logo-url').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('btn-logo-url').click(); } });
+
+$('logos-lista').addEventListener('click', e => {
+    const b = e.target.closest('button[data-i]');
+    if (!b) return;
+    logosCli.splice(+b.dataset.i, 1);
+    mensajeLogos('');
+    panelLogos();
+    render();
+});
 
 $('btn-imprimir').onclick = () => print();
 $('preset').onchange = e => cargarPreset(e.target.value);

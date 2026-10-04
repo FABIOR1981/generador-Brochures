@@ -73,6 +73,19 @@
                     <textarea id="f-clientes" rows="4" placeholder="Empresa Alfa, Logística Sur, Corporación Delta"></textarea>
                     <p class="ayuda">Ideal para perfiles corporativos o profesionales que desean reforzar su credibilidad mediante referencias.</p>
                 </fieldset>
+                <fieldset>
+                    <legend>Logos de clientes</legend>
+                    <p class="ayuda">Aparecen en el brochure junto a los nombres (hasta 8). Funcionan mejor en PNG con fondo transparente o blanco.</p>
+                    <label>Subir logos desde tu equipo (podés elegir varios)</label>
+                    <input type="file" id="f-logos-file" accept="image/*" multiple>
+                    <label for="f-logo-url">O agregar por URL</label>
+                    <div class="fila-url">
+                        <input type="url" id="f-logo-url" placeholder="https://res.cloudinary.com/.../logo.png">
+                        <button type="button" class="btn sec" id="btn-logo-url">Agregar</button>
+                    </div>
+                    <p class="ayuda" id="logos-msg" role="status" aria-live="polite"></p>
+                    <div class="logos-lista" id="logos-lista"></div>
+                </fieldset>
             </div>
 
             <!-- PESTAÑA 4: CONTACTO Y FISCAL -->
