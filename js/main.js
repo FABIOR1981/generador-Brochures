@@ -4,7 +4,7 @@ const nl = s => esc(s).replace(/\n/g, '<br>');
 const F = ['nombre', 'titulo', 'registro', 'titular', 'bio', 'enfoque', 'publico', 'modalidad', 'horarios', 'consulta', 'tel', 'email', 'web', 'lugar', 'razon', 'rut', 'fotourl', 'clientes'];
 
 let fotoUrlCustom = '', accU = 0;
-const LS = 'brochure_pro_v3';
+const LS = 'brochure_pro_v4';
 
 // Sistema de pestañas del panel lateral
 function switchTab(index) {
@@ -54,7 +54,7 @@ const PRE = {
         fotourl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80'
     },
     org: {
-        pl: 't2',
+        pl: 't4', // Por defecto ahora sugiere la plantilla ejecutiva t4 para perfiles organizacionales
         nombre: 'Lic. Lucía Pérez',
         titulo: 'Psicóloga laboral y organizacional',
         registro: '',
@@ -79,7 +79,7 @@ const PRE = {
         fotourl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80'
     },
     oec: {
-        pl: 't2',
+        pl: 't4',
         nombre: 'Lic. Lucía Pérez',
         titulo: 'Consultora experta en OEC y Calidad',
         registro: '',
@@ -103,7 +103,7 @@ const PRE = {
         fotourl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80'
     },
     dev: {
-        pl: 't3',
+        pl: 't5',
         nombre: 'Ing. Lucía Pérez',
         titulo: 'Ingeniera de Software & Cloud Architecture',
         registro: '',
@@ -173,14 +173,17 @@ function prepararRender(d) {
         clientesHtml = `<div style="margin-top:4mm;"><span class="lab" style="margin-bottom:1.5mm;">Clientes / Aliados Destacados</span><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>`;
     }
 
+    let fiscalTxt = '';
     if (d.fiscal && (d.razon || d.rut)) {
-        cont.push(`<div><span class="lab">Datos Fiscales</span>${esc(d.razon)}${d.rut ? '<br>RUT: '+esc(d.rut) : ''}</div>`);
+        fiscalTxt = `<div><span class="lab">Datos Fiscales</span>${esc(d.razon)}${d.rut ? '<br>RUT: '+esc(d.rut) : ''}</div>`;
     }
 
     return {
         foto: fotoHtml,
         cont: cont,
+        fiscalTxt: fiscalTxt,
         serv: d.sv.map(s => `<div class="serv"><b>${esc(s.t)}</b>${esc(s.d)}</div>`).join(''),
+        servCards: d.sv.map(s => `<div class="serv-card"><b>${esc(s.t)}</b>${esc(s.d)}</div>`).join(''),
         pub: d.pub.length ? `<ul>${d.pub.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '',
         meta: [
             ['Modalidad', d.modalidad],
@@ -194,14 +197,96 @@ function prepararRender(d) {
 }
 
 const Plantillas = {
-    t1: (d, p) => `<aside class="lado"><div class="foto">${p.foto}</div><div class="cont">${p.cont}</div></aside><div class="main"><h1>${esc(d.titular)}</h1><div class="quien">${p.quien}</div>${d.bio ? `<p>${nl(d.bio)}</p>` : ''}${S('Enfoque', d.enfoque && `<p>${nl(d.enfoque)}</p>`)}${S('Atiendo a', p.pub)}${S('Servicios', p.serv)}${p.clientesSec}<div class="meta">${p.meta}</div>${p.nota}</div>`,
+    t1: (d, p) => `<aside class="lado"><div class="foto">${p.foto}</div><div class="cont">${p.cont}${p.fiscalTxt}</div></aside><div class="main"><h1>${esc(d.titular)}</h1><div class="quien">${p.quien}</div>${d.bio ? `<p>${nl(d.bio)}</p>` : ''}${S('Enfoque', d.enfoque && `<p>${nl(d.enfoque)}</p>`)}${S('Atiendo a', p.pub)}${S('Servicios', p.serv)}${p.clientesSec}<div class="meta">${p.meta}</div>${p.nota}</div>`,
     
-    t2: (d, p) => `<div class="top"><div><h1>${esc(d.titular)}</h1><div class="quien">${p.quien}</div></div><div class="foto">${p.foto}</div></div><div class="cuerpo"><div>${d.bio ? `<p>${nl(d.bio)}</p>` : ''}${S('Enfoque', d.enfoque && `<p>${nl(d.enfoque)}</p>`)}${S('Dirigido a', p.pub)}${p.clientesSec}</div><div>${S('Servicios', p.serv)}<div class="meta">${p.meta}</div></div></div><div class="pie">${p.cont}${p.nota}</div>`,
+    t2: (d, p) => `<div class="top"><div><h1>${esc(d.titular)}</h1><div class="quien">${p.quien}</div></div><div class="foto">${p.foto}</div></div><div class="cuerpo"><div>${d.bio ? `<p>${nl(d.bio)}</p>` : ''}${S('Enfoque', d.enfoque && `<p>${nl(d.enfoque)}</p>`)}${S('Dirigido a', p.pub)}${p.clientesSec}</div><div>${S('Servicios', p.serv)}${p.meta ? `<div class="meta">${p.meta}</div>` : ''}</div></div><div class="pie">${p.cont}${p.fiscalTxt}${p.nota}</div>`,
     
     t3: (d, p) => {
         const R = (l, h) => h ? `<div class="fila"><b>${l}</b><div>${h}</div></div>` : '';
-        return `<div class="cab"><div><h1>${esc(d.nombre)}</h1><div class="quien">${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}</div></div><div class="foto">${p.foto}</div></div>${d.titular ? `<p class="tit">${esc(d.titular)}</p>` : ''}${d.bio ? `<p>${nl(d.bio)}</p>` : ''}<div>${R('Enfoque', d.enfoque && nl(d.enfoque))}${R('Atiendo a', p.pub)}${d.sv.map(s => R(esc(s.t), esc(s.d))).join('')}${R('Modalidad', esc(d.modalidad))}${R('Horarios', esc(d.horarios))}${R('Primera consulta', esc(d.consulta))}${d.clientesArr.length ? R('Clientes', d.clientesArr.join(', ')) : ''}</div><div class="pie">${p.cont.replace(/<span class="lab">([^<]*)<\/span>/g,'<span class="lab" style="display:inline;margin-right:1.5mm">$1</span>')}${p.nota}</div>`;
-    }
+        return `<div class="cab"><div><h1>${esc(d.nombre)}</h1><div class="quien">${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}</div></div><div class="foto">${p.foto}</div></div>${d.titular ? `<p class="tit">${esc(d.titular)}</p>` : ''}${d.bio ? `<p>${nl(d.bio)}</p>` : ''}<div>${R('Enfoque', d.enfoque && nl(d.enfoque))}${R('Atiendo a', p.pub)}${d.sv.map(s => R(esc(s.t), esc(s.d))).join('')}${R('Modalidad', esc(d.modalidad))}${R('Horarios', esc(d.horarios))}${R('Primera consulta', esc(d.consulta))}${d.clientesArr.length ? R('Clientes', d.clientesArr.join(', ')) : ''}</div><div class="pie">${p.cont.replace(/<span class="lab">([^<]*)<\/span>/g,'<span class="lab" style="display:inline;margin-right:1.5mm">$1</span>')}${p.fiscalTxt}${p.nota}</div>`;
+    },
+
+    // Nueva t4: Ejecutivo Corporativo (Azul Marino y Oro)
+    t4: (d, p) => `
+        <div class="hero-exec">
+            <div>
+                <h1>${esc(d.titular)}</h1>
+                <div class="quien" style="color: #cbd5e1;">${p.quien}</div>
+            </div>
+            <div style="font-size: 8.5pt; border: 1px solid #c59b27; padding: 2mm 4mm; color: #c59b27; border-radius: 3px; text-transform: uppercase; font-weight: 600;">Consultoría Certificada</div>
+        </div>
+        <div class="cuerpo-exec">
+            <div class="perfil-exec">
+                <div>
+                    <h2>Perfil Profesional</h2>
+                    <p>${nl(d.bio)}</p>
+                    ${d.enfoque ? `<p style="margin-top: 3mm; font-size: 9pt; color: #475569;"><b>Enfoque:</b> ${esc(d.enfoque)}</p>` : ''}
+                </div>
+                <div class="foto">${p.foto}</div>
+            </div>
+            ${d.clientesArr.length ? `<div><h2>Clientes y Alianzas</h2><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>` : ''}
+            <div>
+                <h2>Nuestros Servicios</h2>
+                <div class="servicios-grid">${p.servCards}</div>
+            </div>
+        </div>
+        <div class="pie-exec">
+            <div><b>Contacto</b><div>${esc(d.tel)}</div><div>${esc(d.email)}</div><div>${esc(d.lugar)}</div></div>
+            <div><b>Profesional</b><div>${esc(d.web)}</div><div>${esc(d.modalidad)}</div></div>
+            <div><b>Datos Fiscales</b><div>${esc(d.razon)}</div><div>${d.rut ? 'RUT: '+esc(d.rut) : ''}</div></div>
+        </div>
+    `,
+
+    // Nueva t5: Corporativo Moderno (Gris Pizarra y Tech)
+    t5: (d, p) => `
+        <div class="top-modern">
+            <div>
+                <h1>${esc(d.titular)}</h1>
+                <div class="quien" style="color: #cbd5e1;">${p.quien}</div>
+            </div>
+            <div class="foto">${p.foto}</div>
+        </div>
+        <div class="cuerpo-modern">
+            <div>
+                ${S('Presentación', `<p>${nl(d.bio)}</p>`)}
+                ${S('Metodología', d.enfoque ? `<p>${nl(d.enfoque)}</p>` : '')}
+                ${d.clientesArr.length ? `<div><h2>Aliados</h2><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>` : ''}
+            </div>
+            <div>
+                ${S('Servicios', p.serv)}
+                ${S('Disponibilidad', `<p>${esc(d.modalidad)} \vert{}${esc(d.horarios)}</p>`)}
+            </div>
+        </div>
+        <div class="pie-modern">
+            <div>${esc(d.tel)} | ${esc(d.email)} | ${esc(d.lugar)}</div>
+            <div>${esc(d.razon)} ${d.rut ? '| RUT: '+esc(d.rut) : ''}</div>
+        </div>
+    `,
+
+    // Nueva t6: Bienestar Institucional (Verde Bosque)
+    t6: (d, p) => `
+        <div class="header-bio">
+            <div class="foto">${p.foto}</div>
+            <div>
+                <h1>${esc(d.titular)}</h1>
+                <div class="quien">${p.quien}</div>
+            </div>
+        </div>
+        <div class="cuerpo-bio">
+            <div>
+                ${S('Enfoque y Perfil', `<p>${nl(d.bio)}</p>${d.enfoque ? '<p style="margin-top:2mm;"><b>Metodología:</b> '+esc(d.enfoque)+'</p>' : ''}`)}
+                ${d.clientesArr.length ? `<div><h2 style="margin-top:4mm;">Organizaciones</h2><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>` : ''}
+            </div>
+            <div>
+                ${S('Servicios Ofrecidos', p.serv)}
+                ${S('Atención', `<p>${esc(d.modalidad)} -${esc(d.horarios)}</p>`)}
+            </div>
+        </div>
+        <div class="pie-bio">
+            <div><b>Contacto:</b> ${esc(d.tel)} | ${esc(d.email)} | ${esc(d.lugar)}</div>
+            <div>${esc(d.razon)}</div>
+        </div>
+    `
 };
 
 function ajustarEscala() {

@@ -43,7 +43,7 @@ textarea { resize: vertical; }
 :where(#hoja) .foto img { width: 100%; height: 100%; object-fit: cover; }
 :where(#hoja) .lab { display: block; font-size: 8.5pt; color: var(--mut); }
 
-/* Plantillas Visuales */
+/* Plantillas Visuales Originales (t1, t2, t3) */
 .t1 { --ink:#1d2b2a; --mut:#4a5a58; --acc:#3f6f68; --soft:#e4eeeb; display: grid; grid-template-columns: 72mm 1fr; color: var(--ink); }
 .t1 .lado { background: var(--soft); padding: 18mm 11mm; display: flex; flex-direction: column; gap: 8mm; }
 .t1 .foto { width: 50mm; height: 64mm; border-radius: 25mm 25mm 3mm 3mm; background: var(--acc); color: #fff; font: 500 32pt Newsreader, serif; }
@@ -79,6 +79,45 @@ textarea { resize: vertical; }
 .t3 .fila { display: grid; grid-template-columns: 42mm 1fr; gap: 5mm; border-top: .25mm solid #d9dbe0; padding: 2.5mm 0; } .t3 .fila > b { font-weight: 600; }
 .t3 .pie { margin-top: auto; border-top: .3mm solid var(--ink); padding-top: 4mm; display: flex; flex-wrap: wrap; gap: 3mm 10mm; font-size: 9pt; }
 .t3 .nota { width: 100%; font-size: 8pt; color: var(--mut); }
+
+/* Nuevas Plantillas Corporativas y Ejecutivas (t4, t5, t6) */
+
+/* t4: Ejecutivo Corporativo (Azul Marino y Oro - Inspirado en SM Consultores) */
+.t4 { --ink:#0f172a; --mut:#475569; --acc:#c59b27; --soft:#f4ebd0; display: flex; flex-direction: column; font-family: 'Libre Franklin', sans-serif; color: var(--ink); background: #ffffff; }
+.t4 .hero-exec { background: #0d1b2a; color: #f8fafc; padding: 14mm 16mm 10mm; border-bottom: 3px solid #c59b27; display: flex; justify-content: space-between; align-items: center; }
+.t4 .hero-exec h1 { font: 700 20pt/1.2 'Libre Franklin', sans-serif; color: #fdf8e2; margin-bottom: 2mm; }
+.t4 .cuerpo-exec { padding: 12mm 16mm; flex: 1; display: flex; flex-direction: column; gap: 8mm; }
+.t4 .perfil-exec { display: grid; grid-template-columns: 1fr 40mm; gap: 10mm; align-items: center; background: #f8fafc; padding: 8mm; border: 1px solid #e2e8f0; border-radius: 4px; }
+.t4 .foto { width: 40mm; height: 40mm; border-radius: 4px; background: var(--acc); color: #0d1b2a; font: 700 24pt 'Libre Franklin', sans-serif; }
+.t4 h2 { font: 700 11pt 'Libre Franklin', sans-serif; color: #0d1b2a; border-bottom: 1.5px solid #c59b27; padding-bottom: 1mm; margin-bottom: 3mm; }
+.t4 .servicios-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+.t4 .serv-card { background: #f4ebd0; padding: 5mm; border-top: 4px solid #8c7355; border-radius: 3px; font-size: 9pt; }
+.t4 .serv-card b { display: block; margin-bottom: 1.5mm; color: #1e293b; }
+.t4 .pie-exec { background: #0d1b2a; color: #94a3b8; padding: 8mm 16mm; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; font-size: 8.5pt; }
+.t4 .pie-exec b { color: #fff; display: block; margin-bottom: 1mm; }
+
+/* t5: Corporativo Moderno (Gris Pizarra y Tech) */
+.t5 { --ink:#1e293b; --mut:#64748b; --acc:#0284c7; --soft:#f1f5f9; display: flex; flex-direction: column; font-family: Figtree, sans-serif; color: var(--ink); }
+.t5 .top-modern { background: #1e293b; color: #fff; padding: 14mm 16mm; display: flex; justify-content: space-between; align-items: center; }
+.t5 .top-modern h1 { font: 700 20pt/1.2 Figtree, sans-serif; color: #38bdf8; margin-bottom: 2mm; }
+.t5 .foto { width: 38mm; height: 38mm; border-radius: 50%; background: var(--acc); color: #fff; font: 700 22pt Figtree, sans-serif; border: 2px solid #38bdf8; }
+.t5 .cuerpo-modern { padding: 12mm 16mm; flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; }
+.t5 h2 { font: 700 10.5pt Figtree, sans-serif; color: var(--acc); margin-bottom: 2mm; text-transform: uppercase; letter-spacing: 0.5px; }
+.t5 .serv { background: #f8fafc; border-left: 3px solid var(--acc); padding: 3mm 4mm; margin-bottom: 3mm; border-radius: 0 4px 4px 0; font-size: 9pt; }
+.t5 .serv b { display: block; color: #0f172a; }
+.t5 .pie-modern { background: var(--soft); padding: 8mm 16mm; border-top: 1px solid #cbd5e1; display: flex; justify-content: space-between; font-size: 8.5pt; }
+
+/* t6: Bienestar Institucional (Verde Bosque y Tonos Neutros) */
+.t6 { --ink:#1b3022; --mut:#4a6b57; --acc:#2e6940; --soft:#eaf2ed; display: flex; flex-direction: column; font-family: Figtree, sans-serif; color: var(--ink); }
+.t6 .header-bio { background: var(--soft); padding: 14mm 16mm; display: flex; gap: 10mm; align-items: center; border-bottom: 2px solid var(--acc); }
+.t6 .header-bio h1 { font: 700 22pt/1.2 Figtree, sans-serif; color: var(--acc); margin-bottom: 2mm; }
+.t6 .foto { width: 42mm; height: 42mm; border-radius: 6mm; background: var(--acc); color: #fff; font: 700 24pt Figtree, sans-serif; }
+.t6 .cuerpo-bio { padding: 12mm 16mm; flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; }
+.t6 h2 { font: 700 11pt Figtree, sans-serif; color: var(--acc); margin-bottom: 2mm; border-bottom: 1px solid #cbd5e1; padding-bottom: 1mm; }
+.t6 .serv { padding: 2.5mm 0; border-bottom: 1px dashed #cbd5e1; font-size: 9pt; }
+.t6 .serv b { display: block; color: #112218; }
+.t6 .pie-bio { background: #1b3022; color: #cbd5e1; padding: 8mm 16mm; display: flex; justify-content: space-between; font-size: 8.5pt; }
+.t6 .pie-bio b { color: #fff; }
 
 @media (max-width: 1000px) { .app { grid-template-columns: 1fr; height: auto; overflow: visible; } .panel { height: auto; overflow: visible; } .vista { padding: 12px; } }
 @media print { @page { size: A4; margin: 0; } body { background: #fff; -webkit-print-color-adjust: exact; print-color-adjust: exact; } .app { display: block; height: auto; overflow: visible; } .panel { display: none; } .vista { padding: 0; display: block; overflow: visible; } .stage { width: 210mm !important; height: 297mm !important; } #hoja { transform: none !important; box-shadow: none !important; } }
