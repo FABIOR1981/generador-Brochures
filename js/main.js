@@ -10,11 +10,26 @@ const LS = 'brochure_pro_v4';
 function switchTab(index) {
     document.querySelectorAll('.tab-btn').forEach((btn, i) => {
         btn.classList.toggle('active', i === index);
+        btn.setAttribute('aria-selected', i === index ? 'true' : 'false');
+        btn.tabIndex = i === index ? 0 : -1;
     });
     document.querySelectorAll('.tab-pane').forEach((pane, i) => {
         pane.classList.toggle('active', i === index);
     });
 }
+
+document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+    btn.addEventListener('click', () => switchTab(i));
+    btn.addEventListener('keydown', e => {
+        const n = document.querySelectorAll('.tab-btn').length;
+        const dir = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!dir) return;
+        e.preventDefault();
+        const j = (i + dir + n) % n;
+        switchTab(j);
+        document.querySelectorAll('.tab-btn')[j].focus();
+    });
+});
 
 document.querySelectorAll('label:not(.chk)').forEach(l => {
     const n = l.nextElementSibling;
@@ -23,8 +38,8 @@ document.querySelectorAll('label:not(.chk)').forEach(l => {
 
 $('svs').innerHTML = [0, 1, 2, 3].map(i => `
     <div style="margin-top:8px; display:flex; flex-direction:column; gap:4px;">
-        <input id="st${i}" placeholder="Servicio ${i+1}">
-        <textarea id="sd${i}" rows="1" placeholder="Descripción breve"></textarea>
+        <input id="st${i}" placeholder="Servicio ${i+1}" aria-label="Servicio ${i+1}: nombre">
+        <textarea id="sd${i}" rows="1" placeholder="Descripción breve" aria-label="Servicio ${i+1}: descripción"></textarea>
     </div>
 `).join('');
 
@@ -159,7 +174,7 @@ const S = (t, h) => h ? `<section><h2>${t}</h2>${h}</section>` : '';
 
 function prepararRender(d) {
     const imgSrc = fotoUrlCustom || d.fotourl;
-    const fotoHtml = imgSrc ? `<img src="${imgSrc}" alt="Foto">` : esc(ini(d.nombre));
+    const fotoHtml = imgSrc ? `<img src="${esc(imgSrc)}" alt="Foto de ${esc(d.nombre)}">` : esc(ini(d.nombre));
     
     const cont = [
         ['Teléfono', d.tel],
@@ -168,9 +183,10 @@ function prepararRender(d) {
         ['Ubicación', d.lugar]
     ].filter(x => x[1]).map(([l, v]) => `<div><span class="lab">${l}</span>${esc(v)}</div>`).join('');
 
+    const tags = d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('');
     let clientesHtml = '';
     if (d.clientesArr.length > 0) {
-        clientesHtml = `<div style="margin-top:4mm;"><span class="lab" style="margin-bottom:1.5mm;">Clientes / Aliados Destacados</span><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>`;
+        clientesHtml = `<div class="clientes-bloque"><span class="lab">Clientes / Aliados Destacados</span><div class="clientes-grid">${tags}</div></div>`;
     }
 
     let fiscalTxt = '';
@@ -192,6 +208,7 @@ function prepararRender(d) {
         ].filter(m => m[1]).map(([l, v]) => `<div><span class="lab">${l}</span>${esc(v)}</div>`).join(''),
         quien: `<b>${esc(d.nombre)}</b>${esc(d.titulo)}${d.registro ? `<span class="lab">${esc(d.registro)}</span>` : ''}`,
         clientesSec: clientesHtml,
+        tags: tags,
         nota: d.conf ? '<p class="nota">Todo lo conversado en consulta es estrictamente confidencial y está amparado por el secreto profesional.</p>' : ''
     };
 }
@@ -211,29 +228,32 @@ const Plantillas = {
         <div class="hero-exec">
             <div>
                 <h1>${esc(d.titular)}</h1>
-                <div class="quien" style="color: #cbd5e1;">${p.quien}</div>
+                <div class="quien">${p.quien}</div>
             </div>
-            <div style="font-size: 8.5pt; border: 1px solid #c59b27; padding: 2mm 4mm; color: #c59b27; border-radius: 3px; text-transform: uppercase; font-weight: 600;">Perfil Ejecutivo</div>
+            <div class="sello-exec">Perfil Ejecutivo</div>
         </div>
         <div class="cuerpo-exec">
             <div class="perfil-exec">
                 <div>
                     <h2>Perfil Profesional</h2>
-                    <p>${nl(d.bio)}</p>
-                    ${d.enfoque ? `<p style="margin-top: 3mm; font-size: 9pt; color: #475569;"><b>Enfoque:</b> ${esc(d.enfoque)}</p>` : ''}
+                    ${d.bio ? `<p>${nl(d.bio)}</p>` : ''}
+                    ${d.enfoque ? `<p class="enfoque-exec"><b>Enfoque:</b> ${esc(d.enfoque)}</p>` : ''}
+                    ${d.pub.length ? `<p class="enfoque-exec"><b>Dirigido a:</b> ${d.pub.map(esc).join(' · ')}</p>` : ''}
                 </div>
                 <div class="foto">${p.foto}</div>
             </div>
-            ${d.clientesArr.length ? `<div><h2>Clientes y Alianzas</h2><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>` : ''}
-            <div>
+            ${d.clientesArr.length ? `<div><h2>Clientes y Alianzas</h2><div class="clientes-grid">${p.tags}</div></div>` : ''}
+            ${d.sv.length ? `<div>
                 <h2>Nuestros Servicios</h2>
                 <div class="servicios-grid">${p.servCards}</div>
-            </div>
+            </div>` : ''}
+            ${p.meta ? `<div class="meta-exec">${p.meta}</div>` : ''}
         </div>
         <div class="pie-exec">
-            <div><b>Contacto</b><div>${esc(d.tel)}</div><div>${esc(d.email)}</div><div>${esc(d.lugar)}</div></div>
-            <div><b>Profesional</b><div>${esc(d.web)}</div><div>${esc(d.modalidad)}</div></div>
-            <div><b>Datos Fiscales</b><div>${esc(d.razon)}</div><div>${d.rut ? 'RUT: '+esc(d.rut) : ''}</div></div>
+            <div><b>Contacto</b>${[d.tel, d.email, d.lugar].filter(Boolean).map(v => `<div>${esc(v)}</div>`).join('')}</div>
+            <div><b>Profesional</b>${[d.web, d.modalidad].filter(Boolean).map(v => `<div>${esc(v)}</div>`).join('')}</div>
+            ${p.fiscalTxt ? `<div><b>Datos Fiscales</b><div>${esc(d.razon)}</div>${d.rut ? `<div>RUT: ${esc(d.rut)}</div>` : ''}</div>` : ''}
+            ${p.nota}
         </div>
     `,
 
@@ -242,24 +262,26 @@ const Plantillas = {
         <div class="top-modern">
             <div>
                 <h1>${esc(d.titular)}</h1>
-                <div class="quien" style="color: #cbd5e1;">${p.quien}</div>
+                <div class="quien">${p.quien}</div>
             </div>
             <div class="foto">${p.foto}</div>
         </div>
         <div class="cuerpo-modern">
             <div>
-                ${S('Presentación', `<p>${nl(d.bio)}</p>`)}
-                ${S('Metodología', d.enfoque ? `<p>${nl(d.enfoque)}</p>` : '')}
-                ${d.clientesArr.length ? `<div><h2>Aliados</h2><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>` : ''}
+                ${S('Presentación', d.bio && `<p>${nl(d.bio)}</p>`)}
+                ${S('Metodología', d.enfoque && `<p>${nl(d.enfoque)}</p>`)}
+                ${S('Dirigido a', p.pub)}
+                ${d.clientesArr.length ? `<section><h2>Aliados</h2><div class="clientes-grid">${p.tags}</div></section>` : ''}
             </div>
             <div>
                 ${S('Servicios', p.serv)}
-                ${S('Disponibilidad', `<p>${esc(d.modalidad)} \vert{}${esc(d.horarios)}</p>`)}
+                ${S('Disponibilidad', p.meta)}
             </div>
         </div>
         <div class="pie-modern">
-            <div>${esc(d.tel)} | ${esc(d.email)} | ${esc(d.lugar)}</div>
-            <div>${esc(d.razon)} ${d.rut ? '| RUT: '+esc(d.rut) : ''}</div>
+            <div>${[d.tel, d.email, d.lugar].filter(Boolean).map(esc).join(' | ')}</div>
+            ${p.fiscalTxt ? `<div>${esc(d.razon)}${d.rut ? ' | RUT: ' + esc(d.rut) : ''}</div>` : ''}
+            ${p.nota}
         </div>
     `,
 
@@ -274,17 +296,19 @@ const Plantillas = {
         </div>
         <div class="cuerpo-bio">
             <div>
-                ${S('Enfoque y Perfil', `<p>${nl(d.bio)}</p>${d.enfoque ? '<p style="margin-top:2mm;"><b>Metodología:</b> '+esc(d.enfoque)+'</p>' : ''}`)}
-                ${d.clientesArr.length ? `<div><h2 style="margin-top:4mm;">Organizaciones</h2><div class="clientes-grid">${d.clientesArr.map(c => `<span class="cliente-tag">${esc(c)}</span>`).join('')}</div></div>` : ''}
+                ${S('Enfoque y Perfil', (d.bio ? `<p>${nl(d.bio)}</p>` : '') + (d.enfoque ? `<p class="aparte"><b>Metodología:</b> ${esc(d.enfoque)}</p>` : ''))}
+                ${S('Dirigido a', p.pub)}
+                ${d.clientesArr.length ? `<section><h2>Organizaciones</h2><div class="clientes-grid">${p.tags}</div></section>` : ''}
             </div>
             <div>
                 ${S('Servicios Ofrecidos', p.serv)}
-                ${S('Atención', `<p>${esc(d.modalidad)} -${esc(d.horarios)}</p>`)}
+                ${S('Atención', p.meta)}
             </div>
         </div>
         <div class="pie-bio">
-            <div><b>Contacto:</b> ${esc(d.tel)} | ${esc(d.email)} | ${esc(d.lugar)}</div>
-            <div>${esc(d.razon)}</div>
+            <div><b>Contacto:</b> ${[d.tel, d.email, d.lugar].filter(Boolean).map(esc).join(' | ')}</div>
+            ${p.fiscalTxt ? `<div>${esc(d.razon)}${d.rut ? ' | RUT: ' + esc(d.rut) : ''}</div>` : ''}
+            ${p.nota}
         </div>
     `
 };
@@ -295,6 +319,39 @@ function ajustarEscala() {
     const escala = Math.min(1.5, (vista.clientWidth - (innerWidth < 1000 ? 24 : 64)) / wA4);
     $('hoja').style.transform = `scale(${escala})`;
     $('stage').style.width = (wA4 * escala) + 'px';$('stage').style.height = (297 * 3.7795 * escala) + 'px';
+}
+
+function guardar() {
+    try {
+        const est = {};
+        F.forEach(f => { if ($('f-' + f)) est[f] = $('f-' + f).value; });
+        est.sv = [0,1,2,3].map(i => [$('st'+i).value, $('sd'+i).value]);
+        est.pl = $('f-plantilla').value;
+        est.conf = $('f-conf').checked;
+        est.fiscal = $('f-fiscal').checked;
+        est.acc = accU ? $('f-acc').value : '';
+        est.foto = fotoUrlCustom;
+        localStorage.setItem(LS, JSON.stringify(est));
+    } catch (e) { /* almacenamiento lleno o bloqueado: se ignora */ }
+}
+
+function restaurar() {
+    try {
+        const est = JSON.parse(localStorage.getItem(LS) || 'null');
+        if (!est) return false;
+        F.forEach(f => { if ($('f-' + f)) $('f-' + f).value = est[f] || ''; });
+        for (let i = 0; i < 4; i++) {
+            $('st'+i).value = est.sv?.[i]?.[0] || '';
+            $('sd'+i).value = est.sv?.[i]?.[1] || '';
+        }
+        if (Plantillas[est.pl]) $('f-plantilla').value = est.pl;
+        $('f-conf').checked = !!est.conf;
+        $('f-fiscal').checked = !!est.fiscal;
+        fotoUrlCustom = est.foto || '';
+        if (est.acc) { $('f-acc').value = est.acc; accU = 1; }
+        render();
+        return true;
+    } catch (e) { return false; }
 }
 
 function render() {
@@ -316,6 +373,7 @@ function render() {
 
     $('aviso').style.display = hoja.scrollHeight > hoja.clientHeight + 2 ? 'block' : 'none';
     ajustarEscala();
+    guardar();
 }
 
 // Manejo de imagen por archivo local
@@ -347,10 +405,11 @@ $('sinfoto').onclick = () => {
     render();
 };
 
+$('btn-imprimir').onclick = () => print();
 $('preset').onchange = e => cargarPreset(e.target.value);
 document.querySelector('.panel').addEventListener('input', render);
 addEventListener('resize', ajustarEscala);
 $('f-acc').addEventListener('input', () => { accU = 1; });$('f-plantilla').addEventListener('change', () => { accU = 0; render(); });
 
-// Inicializar con Psicología Clínica
-cargarPreset('clinica');
+// Inicializar: retoma el trabajo guardado o carga Psicología Clínica
+if (!restaurar()) cargarPreset('clinica');

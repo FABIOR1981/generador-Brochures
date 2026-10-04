@@ -7,6 +7,7 @@
     <!-- Fuentes de Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <meta name="description" content="Generador de brochures profesionales en formato A4 con vista previa en tiempo real.">
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Libre+Franklin:wght@400;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap" rel="stylesheet">
     <!-- Enlace a la hoja de estilos externa -->
     <link rel="stylesheet" href="css/styles.css">
@@ -26,17 +27,17 @@
         </div>
 
         <!-- Pestañas de Navegación del Panel Lateral -->
-        <div class="tabs-nav">
-            <button class="tab-btn active" onclick="switchTab(0)">1. Perfil</button>
-            <button class="tab-btn" onclick="switchTab(1)">2. Servicios</button>
-            <button class="tab-btn" onclick="switchTab(2)">3. Clientes</button>
-            <button class="tab-btn" onclick="switchTab(3)">4. Contacto</button>
-            <button class="tab-btn" onclick="switchTab(4)">5. Estilo</button>
+        <div class="tabs-nav" role="tablist" aria-label="Secciones del formulario">
+            <button type="button" role="tab" class="tab-btn active" aria-selected="true" aria-controls="pane-0">1. Perfil</button>
+            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-1">2. Servicios</button>
+            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-2">3. Clientes</button>
+            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-3">4. Contacto</button>
+            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-4">5. Estilo</button>
         </div>
 
         <div class="panel-body">
             <!-- PESTAÑA 1: PERFIL -->
-            <div class="tab-pane active" id="pane-0">
+            <div class="tab-pane active" id="pane-0" role="tabpanel">
                 <fieldset>
                     <legend>Información Personal</legend>
                     <label>Nombre</label><input id="f-nombre">
@@ -47,14 +48,14 @@
                     
                     <label>Foto: URL de Cloudinary o Web</label>
                     <input type="text" id="f-fotourl" placeholder="https://res.cloudinary.com/.../tu-foto.jpg">
-                    <label style="margin-top:6px;">O subir desde tu equipo:</label>
+                    <label class="sep-sm">O subir desde tu equipo:</label>
                     <input type="file" id="f-foto-file" accept="image/*">
                     <button class="btn sec" id="sinfoto" type="button">Quitar foto</button>
                 </fieldset>
             </div>
 
             <!-- PESTAÑA 2: SERVICIOS Y ENFOQUE -->
-            <div class="tab-pane" id="pane-1">
+            <div class="tab-pane" id="pane-1" role="tabpanel">
                 <fieldset>
                     <legend>Metodología y Oferta</legend>
                     <label>Enfoque metodológico</label><textarea id="f-enfoque" rows="3"></textarea>
@@ -65,17 +66,17 @@
             </div>
 
             <!-- PESTAÑA 3: CLIENTES -->
-            <div class="tab-pane" id="pane-2">
+            <div class="tab-pane" id="pane-2" role="tabpanel">
                 <fieldset>
                     <legend>Empresas y Aliados</legend>
                     <label>Nombres de empresas separados por comas</label>
                     <textarea id="f-clientes" rows="4" placeholder="Empresa Alfa, Logística Sur, Corporación Delta"></textarea>
-                    <p style="font-size: 0.75rem; color: #64748b; margin-top: 4px;">Ideal para perfiles corporativos o profesionales que desean reforzar su credibilidad mediante referencias.</p>
+                    <p class="ayuda">Ideal para perfiles corporativos o profesionales que desean reforzar su credibilidad mediante referencias.</p>
                 </fieldset>
             </div>
 
             <!-- PESTAÑA 4: CONTACTO Y FISCAL -->
-            <div class="tab-pane" id="pane-3">
+            <div class="tab-pane" id="pane-3" role="tabpanel">
                 <fieldset>
                     <legend>Logística y Contacto</legend>
                     <label>Modalidad de atención</label><input id="f-modalidad">
@@ -96,7 +97,7 @@
             </div>
 
             <!-- PESTAÑA 5: ESTILO Y DISEÑO -->
-            <div class="tab-pane" id="pane-4">
+            <div class="tab-pane" id="pane-4" role="tabpanel">
                 <fieldset>
                     <legend>Apariencia Visual y Plantillas</legend>
                     <label>Plantilla de diseño</label>
@@ -109,15 +110,15 @@
                         <option value="t6">Bienestar Institucional: Verde bosque y tonos neutros</option>
                     </select>
 
-                    <label style="margin-top: 12px;">Color de acento principal</label>
-                    <input type="color" id="f-acc" value="#3f6f68" style="height:38px; padding:3px;">
+                    <label class="sep-md">Color de acento principal</label>
+                    <input type="color" id="f-acc" value="#3f6f68" class="input-color">
                 </fieldset>
             </div>
         </div>
 
         <div class="panel-footer">
-            <div id="aviso">El contenido excede una hoja A4. Te recomendamos acortar textos.</div>
-            <button class="btn" onclick="print()">Guardar como PDF / Imprimir</button>
+            <div id="aviso" role="status" aria-live="polite">El contenido excede una hoja A4. Te recomendamos acortar textos.</div>
+            <button type="button" class="btn" id="btn-imprimir">Guardar como PDF / Imprimir</button>
         </div>
     </div>
 
