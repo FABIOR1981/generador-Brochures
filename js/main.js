@@ -2,6 +2,7 @@ const $ = id => document.getElementById(id);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nl = s => esc(s).replace(/\n/g, '<br>');
 const F = ['nombre', 'titulo', 'registro', 'titular', 'bio', 'enfoque', 'publico', 'modalidad', 'horarios', 'consulta', 'tel', 'email', 'web', 'lugar', 'razon', 'rut', 'fotourl', 'clientes'];
+const CONTACTO = { nombre: 'Lic. Rita Morales', tel: '+598 99140274', email: 'licritamorales@gmail.com' };
 
 let fotoUrlCustom = '', accU = 0, logosCli = [];
 const MAX_LOGOS = 8;
@@ -47,7 +48,7 @@ $('svs').innerHTML = [0, 1, 2, 3].map(i => `
 const PRE = {
     clinica: {
         pl: 't1',
-        nombre: 'Lic. Lucía Pérez',
+        nombre: CONTACTO.nombre,
         titulo: 'Psicóloga clínica',
         registro: 'Registro profesional N.º 0000',
         titular: 'Un espacio seguro para entender lo que sentís y empezar a cambiar',
@@ -63,15 +64,15 @@ const PRE = {
         modalidad: 'Presencial y online',
         horarios: 'Lunes a viernes de 9 a 19 h',
         consulta: 'Primera entrevista de 50 minutos para conocer necesidades y definir objetivos.',
-        tel: '+598 99 000 000',
-        email: 'contacto@luciaperez.uy',
-        web: '@luciaperez.psi',
+        tel: CONTACTO.tel,
+        email: CONTACTO.email,
+        web: '',
         lugar: 'Montevideo, Uruguay',
         fotourl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80'
     },
     org: {
         pl: 't4', // Por defecto ahora sugiere la plantilla ejecutiva t4 para perfiles organizacionales
-        nombre: 'Lic. Lucía Pérez',
+        nombre: CONTACTO.nombre,
         titulo: 'Psicóloga laboral y organizacional',
         registro: '',
         titular: 'Psicología organizacional para equipos que quieren trabajar mejor',
@@ -88,15 +89,15 @@ const PRE = {
         modalidad: 'In-company y remoto',
         horarios: 'Coordinación previa',
         consulta: 'Reunión inicial de relevamiento sin cargo para definir alcance.',
-        tel: '+598 99 000 000',
-        email: 'consultas@luciaperez.uy',
-        web: 'www.luciaperez-org.uy',
+        tel: CONTACTO.tel,
+        email: CONTACTO.email,
+        web: '',
         lugar: 'Montevideo, Uruguay',
         fotourl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=600&q=80'
     },
     oec: {
         pl: 't4',
-        nombre: 'Lic. Lucía Pérez',
+        nombre: CONTACTO.nombre,
         titulo: 'Especialista en OEC y Calidad',
         registro: '',
         titular: 'Estrategia, gestión y cumplimiento para organizaciones de alto desempeño',
@@ -112,15 +113,15 @@ const PRE = {
         modalidad: 'Presencial en planta y auditoría remota',
         horarios: 'Lunes a viernes',
         consulta: 'Reunión técnica preliminar para evaluar estado de cumplimiento.',
-        tel: '+598 99 000 000',
-        email: 'oec@luciaperez.uy',
-        web: 'www.luciaperez-oec.uy',
+        tel: CONTACTO.tel,
+        email: CONTACTO.email,
+        web: '',
         lugar: 'Montevideo, Uruguay',
         fotourl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=600&q=80'
     },
     dev: {
         pl: 't5',
-        nombre: 'Ing. Lucía Pérez',
+        nombre: CONTACTO.nombre,
         titulo: 'Ingeniera de Software & Cloud Architecture',
         registro: '',
         titular: 'Arquitectura de software escalable y desarrollo backend de alto rendimiento',
@@ -136,9 +137,9 @@ const PRE = {
         modalidad: 'Remoto internacional / Híbrido',
         horarios: 'Horario flexible',
         consulta: 'Evaluación técnica inicial de arquitectura y requerimientos.',
-        tel: '+598 99 000 000',
-        email: 'dev@luciaperez.uy',
-        web: 'github.com/luciaperez',
+        tel: CONTACTO.tel,
+        email: CONTACTO.email,
+        web: '',
         lugar: 'Montevideo, Uruguay',
         fotourl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80'
     }
@@ -164,6 +165,10 @@ function cargarPreset(k) {
 function leerDatos() {
     const d = {};
     F.forEach(k => { if($('f-'+k)) d[k] =$('f-'+k).value.trim(); });
+    Object.entries(CONTACTO).forEach(([key, value]) => {
+        $('f-' + key).value = value;
+        d[key] = value;
+    });
     d.conf = $('f-conf').checked;
     d.fiscal = $('f-fiscal').checked;
     d.pub = d.publico ? d.publico.split('\n').map(s => s.trim()).filter(Boolean) : [];
