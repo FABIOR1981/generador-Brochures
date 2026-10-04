@@ -1,7 +1,7 @@
 # Generador Profesional de Brochures (SPA Vanilla)
 
 ## 1. Descripción General del Proyecto
-Aplicación web de una sola página (**Single Page Application**) desarrollada con **HTML5, CSS3 y JavaScript vanilla** (sin frameworks ni dependencias externas de compilación). Su propósito es permitir a profesionales (psicólogos, consultores, ingenieros) generar, previsualizar en tiempo real y exportar a PDF/A4 brochures ejecutivos y comerciales altamente personalizados.
+Aplicación web de una sola página (**Single Page Application**) desarrollada con **HTML5, CSS3 y JavaScript vanilla** (sin frameworks ni dependencias externas de compilación). Su propósito es permitir a profesionales (psicólogos, especialistas, ingenieros) generar, previsualizar en tiempo real y exportar a PDF/A4 brochures ejecutivos y comerciales altamente personalizados.
 
 ## 2. Arquitectura y Estructura de Archivos
 El proyecto sigue estrictamente el principio de separación de responsabilidades:
@@ -41,7 +41,7 @@ t2: Organizacional (Portada ejecutiva y área de etiquetas de clientes).
 
 t3: Minimal (Filas limpias y diseño aireado).
 
-t4: Ejecutivo Corporativo (Azul marino y oro - Estilo SM Consultores).
+t4: Ejecutivo Corporativo (Azul marino y oro).
 
 t5: Corporativo Moderno (Gris Pizarra y estructura Tech).
 
@@ -54,7 +54,7 @@ clinica: Psicología Clínica (Pacientes).
 
 org: Psicología Laboral / Organizacional.
 
-oec: Consultoría OEC y Calidad.
+oec: Especialista en OEC y Calidad.
 
 dev: Ingeniería de Software & Tech.
 

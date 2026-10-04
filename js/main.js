@@ -81,11 +81,11 @@ const PRE = {
     oec: {
         pl: 't4',
         nombre: 'Lic. Lucía Pérez',
-        titulo: 'Consultora experta en OEC y Calidad',
+        titulo: 'Especialista en OEC y Calidad',
         registro: '',
         titular: 'Estrategia, gestión y cumplimiento para organizaciones de alto desempeño',
         bio: 'Especialista en implementación de Programas de Operador Económico Calificado (OEC), comercio exterior y sistemas integrados.',
-        enfoque: 'Auditoría de sistemas certificados y mejora continua bajo normas internacionales.',
+        enfoque: 'Auditoría de procesos y mejora continua bajo normas internacionales.',
         publico: 'Empresas exportadoras e importadoras\nOperadores logísticos\nCadenas de suministro',
         sv: [
             ['Implementación OEC', 'Diagnóstico, manuales de procesos y gestión de riesgos aduaneros.'],
@@ -213,7 +213,7 @@ const Plantillas = {
                 <h1>${esc(d.titular)}</h1>
                 <div class="quien" style="color: #cbd5e1;">${p.quien}</div>
             </div>
-            <div style="font-size: 8.5pt; border: 1px solid #c59b27; padding: 2mm 4mm; color: #c59b27; border-radius: 3px; text-transform: uppercase; font-weight: 600;">Consultoría Certificada</div>
+            <div style="font-size: 8.5pt; border: 1px solid #c59b27; padding: 2mm 4mm; color: #c59b27; border-radius: 3px; text-transform: uppercase; font-weight: 600;">Perfil Ejecutivo</div>
         </div>
         <div class="cuerpo-exec">
             <div class="perfil-exec">
