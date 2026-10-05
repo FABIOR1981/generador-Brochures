@@ -24,6 +24,7 @@ function switchTab(index) {
     });
     document.querySelectorAll('.tab-pane').forEach((pane, i) => {
         pane.classList.toggle('active', i === index);
+        pane.hidden = i !== index;
     });
 }
 
@@ -395,6 +396,14 @@ function render() {
         hoja.style.removeProperty('--acc');
         const colorCalculado = getComputedStyle(hoja).getPropertyValue('--acc').trim();
         if (/^#[0-9a-f]{6}$/i.test(colorCalculado)) $('f-acc').value = colorCalculado;
+    }
+    const accent = getComputedStyle(hoja).getPropertyValue('--acc').trim();
+    const rgb = accent.match(/^#([\da-f]{6})$/i)?.[1];
+    if (rgb) {
+        const channels = [0, 2, 4].map(offset => parseInt(rgb.slice(offset, offset + 2), 16) / 255);
+        const luminance = channels.map(channel => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4)
+            .reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+        hoja.style.setProperty('--on-acc', luminance > 0.179 ? '#111827' : '#ffffff');
     }
 
     $('aviso').style.display = hoja.scrollHeight > hoja.clientHeight + 2 ? 'block' : 'none';

@@ -13,11 +13,11 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<div class="app">
-    <div class="panel">
+<main class="app">
+    <section class="panel" aria-label="Edición del brochure">
         <div class="panel-header">
             <h1>Generador de Brochures</h1>
-            <label>Cargar Perfil Predeterminado</label>
+            <label for="preset">Cargar perfil predeterminado</label>
             <select id="preset">
                 <option value="clinica">Psicóloga Clínica (Pacientes / Adultos)</option>
                 <option value="org">Psicóloga Laboral / Organizacional</option>
@@ -28,16 +28,16 @@
 
         <!-- Pestañas de Navegación del Panel Lateral -->
         <div class="tabs-nav" role="tablist" aria-label="Secciones del formulario">
-            <button type="button" role="tab" class="tab-btn active" aria-selected="true" aria-controls="pane-0">1. Perfil</button>
-            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-1">2. Servicios</button>
-            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-2">3. Clientes</button>
-            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-3">4. Contacto</button>
-            <button type="button" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-4">5. Estilo</button>
+            <button type="button" id="tab-0" role="tab" class="tab-btn active" aria-selected="true" aria-controls="pane-0">1. Perfil</button>
+            <button type="button" id="tab-1" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-1">2. Servicios</button>
+            <button type="button" id="tab-2" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-2">3. Clientes</button>
+            <button type="button" id="tab-3" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-3">4. Contacto</button>
+            <button type="button" id="tab-4" role="tab" class="tab-btn" aria-selected="false" tabindex="-1" aria-controls="pane-4">5. Estilo</button>
         </div>
 
         <div class="panel-body">
             <!-- PESTAÑA 1: PERFIL -->
-            <div class="tab-pane active" id="pane-0" role="tabpanel">
+            <div class="tab-pane active" id="pane-0" role="tabpanel" aria-labelledby="tab-0" tabindex="0">
                 <fieldset>
                     <legend>Información Personal</legend>
                     <label>Nombre</label><input id="f-nombre" value="Lic. Rita Morales" readonly>
@@ -55,7 +55,7 @@
             </div>
 
             <!-- PESTAÑA 2: SERVICIOS Y ENFOQUE -->
-            <div class="tab-pane" id="pane-1" role="tabpanel">
+            <div class="tab-pane" id="pane-1" role="tabpanel" aria-labelledby="tab-1" tabindex="0" hidden>
                 <fieldset>
                     <legend>Metodología y Oferta</legend>
                     <label>Enfoque metodológico</label><textarea id="f-enfoque" rows="3"></textarea>
@@ -66,7 +66,7 @@
             </div>
 
             <!-- PESTAÑA 3: CLIENTES -->
-            <div class="tab-pane" id="pane-2" role="tabpanel">
+            <div class="tab-pane" id="pane-2" role="tabpanel" aria-labelledby="tab-2" tabindex="0" hidden>
                 <fieldset>
                     <legend>Empresas y Aliados</legend>
                     <label>Nombres de empresas separados por comas</label>
@@ -89,7 +89,7 @@
             </div>
 
             <!-- PESTAÑA 4: CONTACTO Y FISCAL -->
-            <div class="tab-pane" id="pane-3" role="tabpanel">
+            <div class="tab-pane" id="pane-3" role="tabpanel" aria-labelledby="tab-3" tabindex="0" hidden>
                 <fieldset>
                     <legend>Logística y Contacto</legend>
                     <label>Modalidad de atención</label><input id="f-modalidad">
@@ -110,7 +110,7 @@
             </div>
 
             <!-- PESTAÑA 5: ESTILO Y DISEÑO -->
-            <div class="tab-pane" id="pane-4" role="tabpanel">
+            <div class="tab-pane" id="pane-4" role="tabpanel" aria-labelledby="tab-4" tabindex="0" hidden>
                 <fieldset>
                     <legend>Apariencia Visual y Plantillas</legend>
                     <label>Plantilla de diseño</label>
@@ -133,14 +133,14 @@
             <div id="aviso" role="status" aria-live="polite">El contenido excede una hoja A4. Te recomendamos acortar textos.</div>
             <button type="button" class="btn" id="btn-imprimir">Guardar como PDF / Imprimir</button>
         </div>
-    </div>
+    </section>
 
-    <div class="vista">
+    <section class="vista" aria-label="Vista previa del brochure">
         <div class="stage" id="stage">
             <div id="hoja"></div>
         </div>
-    </div>
-</div>
+    </section>
+</main>
 
 <!-- Enlace al archivo JavaScript externo -->
 <script src="js/main.js"></script>
