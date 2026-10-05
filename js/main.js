@@ -339,9 +339,11 @@ const Plantillas = {
 function ajustarEscala() {
     const vista = document.querySelector('.vista');
     const wA4 = 210 * 3.7795;
+    const altoHoja = $('hoja').scrollHeight;
     const escala = Math.min(1.5, (vista.clientWidth - (innerWidth < 1000 ? 24 : 64)) / wA4);
     $('hoja').style.transform = `scale(${escala})`;
-    $('stage').style.width = (wA4 * escala) + 'px';$('stage').style.height = (297 * 3.7795 * escala) + 'px';
+    $('stage').style.width = (wA4 * escala) + 'px';
+    $('stage').style.height = (altoHoja * escala) + 'px';
 }
 
 function guardar() {
@@ -406,7 +408,8 @@ function render() {
         hoja.style.setProperty('--on-acc', luminance > 0.179 ? '#111827' : '#ffffff');
     }
 
-    $('aviso').style.display = hoja.scrollHeight > hoja.clientHeight + 2 ? 'block' : 'none';
+    const paginas = Math.ceil(hoja.scrollHeight / (297 * 3.7795));
+    $('aviso').style.display = paginas > 3 ? 'block' : 'none';
     ajustarEscala();
     guardar();
 }
