@@ -4,6 +4,10 @@ Herramienta web para armar brochures profesionales de una página. Se completan 
 
 Sitio publicado: https://generador-brochures.netlify.app
 
+## Documentación
+
+El manual de usuario está en [documentacion-central](https://github.com/FABIOR1981/documentacion-central/tree/main/generador-Brochures/documentacion) ([PDF](https://github.com/FABIOR1981/documentacion-central/blob/main/generador-Brochures/documentacion/MANUAL_USUARIO.pdf)). También se puede consultar desde la bitácora de proyectos.
+
 ## Funcionalidades
 
 - **Perfiles predeterminados** para empezar rápido: psicología clínica, psicología organizacional, OEC y calidad, e ingeniería de software.
